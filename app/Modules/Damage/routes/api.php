@@ -19,7 +19,7 @@ Route::group([
     Route::get('/getDamagesByDeclareds/{id}', [DamageController::class, 'getDamagesByDeclareds']);
     Route::get('/getDamagesByConfirmeds/{id}', [DamageController::class, 'getDamagesByConfirmeds']);
     Route::get('/getDamagesByCloseds/{id}', [DamageController::class, 'getDamagesByCloseds']);
-    Route::get('/getDamagesByReverteds/{id}', [DamageController::class, 'getDamagesByReverteds']);
+    Route::get('/getDamagesByrejecteds/{id}', [DamageController::class, 'getDamagesByrejecteds']);
     Route::get('/getEquipmentDamagesMergedWithDamageTypes/{id}', [DamageController::class, 'getEquipmentDamagesMergedWithDamageTypes']);
     Route::post('/declareDamage', [DamageController::class, 'declareDamage']);
     Route::post('/confirmDamage', [DamageController::class, 'confirmDamage']);

@@ -26,8 +26,8 @@ class Damage extends Model
         return $this->belongsTo(User::class,"closedBy_id");
     }
 
-    public function revertedBy(){
-        return $this->belongsTo(User::class,"revertedBy_id");
+    public function rejectedBy(){
+        return $this->belongsTo(User::class,"rejectedBy_id");
     }
 
     public function equipment(){
@@ -49,7 +49,7 @@ class Damage extends Model
         'declaredAt' => 'datetime:d/m/Y H:i',
         'confirmedAt' => 'datetime:d/m/Y H:i',
         'closedAt' => 'datetime:d/m/Y H:i',
-        'revertedAt' => 'datetime:d/m/Y H:i',
+        'rejectedAt' => 'datetime:d/m/Y H:i',
         'created_at' => 'datetime:d/m/Y H:i',
         'updated_at' => 'datetime:d/m/Y H:i',
 

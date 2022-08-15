@@ -23,7 +23,7 @@ class DamageController extends Controller
         $damages=Damage::with("declaredBy.fonction.department")
             ->with("confirmedBy.fonction.department")
             ->with("closedBy.fonction.department")
-            ->with("revertedBy.fonction.department")
+            ->with("rejectedBy.fonction.department")
             ->with("equipment.profileGroup.department")
             ->with("damageType","damageType.profileGroup.department","damageType.department")
             ->with("photos")
@@ -88,7 +88,7 @@ class DamageController extends Controller
             $damage->declaredBy=$damage->declaredBy()->with("fonction.department")->first();
             $damage->confirmedBy=$damage->confirmedBy()->with("fonction.department")->first();
             $damage->closedBy=$damage->closedBy()->with("fonction.department")->first();
-            $damage->revertedBy=$damage->revertedBy()->with("fonction.department")->first();
+            $damage->rejectedBy=$damage->rejectedBy()->with("fonction.department")->first();
             $damage->equipment=$damage->equipment()->with("profileGroup.department")->first();
             $damage->damageType=$damage->damageType()->with("profileGroup.department")->with("department")->first();
             $damage->photos=$damage->photos;
@@ -147,7 +147,7 @@ class DamageController extends Controller
         $damage->declared_by=$damage->declaredBy()->with("fonction.department")->first();
         $damage->confirmed_by=$damage->confirmedBy()->with("fonction.department")->first();
         $damage->closed_by=$damage->closedBy()->with("fonction.department")->first();
-        $damage->reverted_by=$damage->revertedBy()->with("fonction.department")->first();
+        $damage->rejected_by=$damage->rejectedBy()->with("fonction.department")->first();
         $damage->equipment=$damage->equipment()->with("profileGroup.department")->first();
         $damage->damage_type=$damage->damageType()->with("profileGroup.department")->with("department")->first();
         $damage->photos=$damage->photos;
@@ -199,7 +199,7 @@ class DamageController extends Controller
         $damage->declared_by=$damage->declaredBy()->with("fonction.department")->first();
         $damage->confirmed_by=$damage->confirmedBy()->with("fonction.department")->first();
         $damage->closed_by=$damage->closedBy()->with("fonction.department")->first();
-        $damage->reverted_by=$damage->revertedBy()->with("fonction.department")->first();
+        $damage->rejected_by=$damage->rejectedBy()->with("fonction.department")->first();
         $damage->equipment=$damage->equipment()->with("profileGroup.department")->first();
         $damage->damage_type=$damage->damageType()->with("profileGroup.department")->with("department")->first();
         $damage->photos=$damage->photos;
@@ -212,7 +212,7 @@ class DamageController extends Controller
     public function revertDamage(Request $request){
         $validator = Validator::make($request->all(), [
             "id" => "required",
-            "revertedBy_id" => "required",
+            "rejectedBy_id" => "required",
         ]);
         if ($validator->fails()) {
             return [
@@ -220,8 +220,8 @@ class DamageController extends Controller
                 "status" => "406_2"
             ];
         }
-        $revertedBy=User::find($request->revertedBy_id);
-        if(!$revertedBy){
+        $rejectedBy=User::find($request->rejectedBy_id);
+        if(!$rejectedBy){
             return [
                 "payload"=>"user is not exist !",
                 "status"=>"user_404",
@@ -239,21 +239,21 @@ class DamageController extends Controller
 
         if($damage->status!="resolved"){
             return [
-                "payload"=>"damage is not resolved to be reverted !",
+                "payload"=>"damage is not resolved to be rejected !",
                 "status"=>"damage_400",
             ];
         }
 
         $damage->status="on progress";
-        $damage->revertedBy_id=$revertedBy->id;
-        $damage->revertedAt=Carbon::now();
-        $damage->revertedTimes=++$damage->revertedTimes;
-        $damage->revertedDescription=$request->revertedDescription;
+        $damage->rejectedBy_id=$rejectedBy->id;
+        $damage->rejectedAt=Carbon::now();
+        $damage->rejectedTimes=++$damage->rejectedTimes;
+        $damage->rejectedDescription=$request->rejectedDescription;
         $damage->save();
         $damage->declared_by=$damage->declaredBy()->with("fonction.department")->first();
         $damage->confirmed_by=$damage->confirmedBy()->with("fonction.department")->first();
         $damage->closed_by=$damage->closedBy()->with("fonction.department")->first();
-        $damage->reverted_by=$damage->revertedBy()->with("fonction.department")->first();
+        $damage->rejected_by=$damage->rejectedBy()->with("fonction.department")->first();
         $damage->equipment=$damage->equipment()->with("profileGroup.department")->first();
         $damage->damage_type=$damage->damageType()->with("profileGroup.department")->with("department")->first();
         $damage->photos=$damage->photos;
@@ -281,7 +281,7 @@ class DamageController extends Controller
                     ->with("declaredBy.fonction.department")
                     ->with("confirmedBy.fonction.department")
                     ->with("closedBy.fonction.department")
-                    ->with("revertedBy.fonction.department")
+                    ->with("rejectedBy.fonction.department")
                     ->with("equipment.profileGroup.department")
                     ->with("damageType","damageType.profileGroup.department","damageType.department")
                     ->with("photos")
@@ -309,7 +309,7 @@ class DamageController extends Controller
             $data = $equipment->damages()->with("declaredBy.fonction.department")
             ->with("confirmedBy.fonction.department")
             ->with("closedBy.fonction.department")
-            ->with("revertedBy.fonction.department")
+            ->with("rejectedBy.fonction.department")
             ->with("equipment.profileGroup.department")
             ->with("damageType","damageType.profileGroup.department","damageType.department")
             ->with("photos")
@@ -335,7 +335,7 @@ class DamageController extends Controller
             $data = $equipment->damages()->with("declaredBy.fonction.department")
             ->with("confirmedBy.fonction.department")
             ->with("closedBy.fonction.department")
-            ->with("revertedBy.fonction.department")
+            ->with("rejectedBy.fonction.department")
             ->with("equipment.profileGroup.department")
             ->with("damageType","damageType.profileGroup.department","damageType.department")
             ->with("photos")
@@ -346,7 +346,7 @@ class DamageController extends Controller
                     $rapportModel->name=$equipment->name;
                     $rapportModel->status=$data[$i]->status;
                     $rapportModel->Description=$data[$i]->description;
-                    $rapportModel->revertedTimes=$data[$i]->revertedTimes;
+                    $rapportModel->rejectedTimes=$data[$i]->rejectedTimes;
                     $rapportModel->declared_by=$data[$i]->declaredBy->username==null?"":$data[$i]->declaredBy->username;
                     $rapportModel->declaredAt=$data[$i]->declaredAt;
                     $rapportModel->damage_type=$data[$i]->damageType->name;
@@ -376,7 +376,7 @@ class DamageController extends Controller
             $data = $equipment->damages()->with("declaredBy.fonction.department")
             ->with("confirmedBy.fonction.department")
             ->with("closedBy.fonction.department")
-            ->with("revertedBy.fonction.department")
+            ->with("rejectedBy.fonction.department")
             ->with("equipment.profileGroup.department")
             ->with("damageType","damageType.profileGroup.department","damageType.department")
             ->with("photos")
@@ -385,7 +385,7 @@ class DamageController extends Controller
             $confirmedCount=0;
             $closedCount=0;
             $dataIT=collect ([]);
-            $nameEquipment=$data[1]->equipment->name;
+            $nameEquipment=$data[0]->equipment->name;
             for ($i=0; $i <count($data) ; $i++) {
 
                 if ($data[$i]->damageType->department->id==1) {
@@ -424,7 +424,7 @@ class DamageController extends Controller
             $data = $equipment->damages()->with("declaredBy.fonction.department")
             ->with("confirmedBy.fonction.department")
             ->with("closedBy.fonction.department")
-            ->with("revertedBy.fonction.department")
+            ->with("rejectedBy.fonction.department")
             ->with("equipment.profileGroup.department")
             ->with("damageType","damageType.profileGroup.department","damageType.department")
             ->with("photos")
@@ -433,7 +433,7 @@ class DamageController extends Controller
             $confirmedCount=0;
             $closedCount=0;
             $dataTEC=collect ([]);
-            $nameEquipment=$data[1]->equipment->name;
+            $nameEquipment=$data[0]->equipment->name;
             for ($i=0; $i <count($data) ; $i++) {
                 if ($data[$i]->damageType->department->id==2) {
                     $dataTEC->push($data[$i]);
@@ -473,7 +473,7 @@ class DamageController extends Controller
                 "payload" => $declaredBy->declaredBys()->with("declaredBy.fonction.department")
                     ->with("confirmedBy.fonction.department")
                     ->with("closedBy.fonction.department")
-                    ->with("revertedBy.fonction.department")
+                    ->with("rejectedBy.fonction.department")
                     ->with("equipment.profileGroup.department")
                     ->with("damageType","damageType.profileGroup.department","damageType.department")
                     ->with("photos")
@@ -496,7 +496,7 @@ class DamageController extends Controller
                 "payload" => $declaredBy->confirmedBys()->with("declaredBy.fonction.department")
                     ->with("confirmedBy.fonction.department")
                     ->with("closedBy.fonction.department")
-                    ->with("revertedBy.fonction.department")
+                    ->with("rejectedBy.fonction.department")
                     ->with("equipment.profileGroup.department")
                     ->with("damageType","damageType.profileGroup.department","damageType.department")
                     ->with("photos")
@@ -519,7 +519,7 @@ class DamageController extends Controller
                 "payload" => $declaredBy->closedBys()->with("declaredBy.fonction.department")
                     ->with("confirmedBy.fonction.department")
                     ->with("closedBy.fonction.department")
-                    ->with("revertedBy.fonction.department")
+                    ->with("rejectedBy.fonction.department")
                     ->with("equipment.profileGroup.department")
                     ->with("damageType","damageType.profileGroup.department","damageType.department")
                     ->with("photos")
@@ -529,7 +529,7 @@ class DamageController extends Controller
         }
     }
 
-    public function getDamagesByReverteds($id){
+    public function getDamagesByrejecteds($id){
         $declaredBy=User::select()->where('id', $id)->with("fonction")->first();
         if(!$declaredBy){
             return [
@@ -539,10 +539,10 @@ class DamageController extends Controller
         }
         else {
             return [
-                "payload" => $declaredBy->revertedBys()->with("declaredBy.fonction.department")
+                "payload" => $declaredBy->rejectedBys()->with("declaredBy.fonction.department")
                     ->with("confirmedBy.fonction.department")
                     ->with("closedBy.fonction.department")
-                    ->with("revertedBy.fonction.department")
+                    ->with("rejectedBy.fonction.department")
                     ->with("equipment.profileGroup.department")
                     ->with("damageType","damageType.profileGroup.department","damageType.department")
                     ->with("photos")
@@ -579,7 +579,7 @@ class DamageController extends Controller
                     ->with("declaredBy.fonction.department")
                     ->with("confirmedBy.fonction.department")
                     ->with("closedBy.fonction.department")
-                    ->with("revertedBy.fonction.department")
+                    ->with("rejectedBy.fonction.department")
                     ->with("equipment.profileGroup.department")
                     ->with("damageType","damageType.profileGroup.department","damageType.department")
                     ->with("photos")

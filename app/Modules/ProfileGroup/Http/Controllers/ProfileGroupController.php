@@ -300,7 +300,7 @@ class ProfileGroupController extends Controller
                 $damages=$equipment[$k]->damages()->with("declaredBy.fonction.department")
                 ->with("confirmedBy.fonction.department")
                 ->with("closedBy.fonction.department")
-                ->with("revertedBy.fonction.department")
+                ->with("rejectedBy.fonction.department")
                 ->with("equipment.profileGroup.department")
                 ->with("damageType","damageType.profileGroup.department","damageType.department")
                 ->get();
@@ -358,7 +358,7 @@ class ProfileGroupController extends Controller
                 $damages=$equipment[$k]->damages()->with("declaredBy.fonction.department")
                 ->with("confirmedBy.fonction.department")
                 ->with("closedBy.fonction.department")
-                ->with("revertedBy.fonction.department")
+                ->with("rejectedBy.fonction.department")
                 ->with("equipment.profileGroup.department")
                 ->with("damageType","damageType.profileGroup.department","damageType.department")
                 ->get();
@@ -477,7 +477,7 @@ class ProfileGroupController extends Controller
                 $damages=$equipments[$i]->damages()->with("declaredBy.fonction.department")
                 ->with("confirmedBy.fonction.department")
                 ->with("closedBy.fonction.department")
-                ->with("revertedBy.fonction.department")
+                ->with("rejectedBy.fonction.department")
                 ->with("equipment.profileGroup.department")
                 ->with("damageType","damageType.profileGroup.department","damageType.department")
                 ->get();
@@ -544,7 +544,7 @@ class ProfileGroupController extends Controller
                 $damages=$equipments[$i]->damages()->with("declaredBy.fonction.department")
                 ->with("confirmedBy.fonction.department")
                 ->with("closedBy.fonction.department")
-                ->with("revertedBy.fonction.department")
+                ->with("rejectedBy.fonction.department")
                 ->with("equipment.profileGroup.department")
                 ->with("damageType","damageType.profileGroup.department","damageType.department")
                 ->get();

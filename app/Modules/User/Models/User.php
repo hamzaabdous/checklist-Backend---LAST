@@ -55,9 +55,9 @@ class User extends Authenticatable
         return $this->hasMany(Damage::class,"closedBy_id");
     }
 
-    public function revertedBys()
+    public function rejectedBys()
     {
-        return $this->hasMany(Damage::class,"revertedBy_id");
+        return $this->hasMany(Damage::class,"rejectedBy_id");
     }
 
     protected $casts = [

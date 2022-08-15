@@ -123,19 +123,19 @@ def replaceInHTML(damage):
             <td colspan="2" class="separator"></td>
           </tr>
           <tr>
-            <td><h5>Reverted By</h5></td>
+            <td><h5>rejected By</h5></td>
             <td>phone and tablet5</td>
           </tr>
           <tr>
-            <td><h5>Reverted Reason</h5></td>
+            <td><h5>rejected Reason</h5></td>
             <td>phone and tablet5</td>
           </tr>
           <tr>
-            <td><h5>Reverted At</h5></td>
+            <td><h5>rejected At</h5></td>
             <td>phone and tablet5</td>
           </tr>
           <tr>
-            <td><h5>Reverted Times</h5></td>
+            <td><h5>rejected Times</h5></td>
             <td>phone and tablet5</td>
           </tr>
         </table>

@@ -36,11 +36,11 @@ class CreateDamagesTable extends Migration
             $table->dateTime("closedAt")->nullable();
             $table->foreign('closedBy_id')->references('id')->on('users')->onDelete('cascade');
 
-            $table->bigInteger('revertedBy_id')->unsigned()->nullable();
-            $table->dateTime("revertedAt")->nullable();
-            $table->text("revertedDescription")->nullable();
-            $table->integer("revertedTimes")->default(0);
-            $table->foreign('revertedBy_id')->references('id')->on('users')->onDelete('cascade');
+            $table->bigInteger('rejectedBy_id')->unsigned()->nullable();
+            $table->dateTime("rejectedAt")->nullable();
+            $table->text("rejectedDescription")->nullable();
+            $table->integer("rejectedTimes")->default(0);
+            $table->foreign('rejectedBy_id')->references('id')->on('users')->onDelete('cascade');
 
             $table->bigInteger('equipment_id')->unsigned()->nullable();
             $table->foreign('equipment_id')->references('id')->on('equipments')->onDelete('cascade');
