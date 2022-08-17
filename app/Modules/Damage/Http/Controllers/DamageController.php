@@ -185,12 +185,12 @@ class DamageController extends Controller
             ];
         }
 
-        if($damage->status!="resolved"){
+       /*  if($damage->status!="resolved"){
             return [
                 "payload"=>"damage is not resolved to be closed !",
                 "status"=>"damage_400",
             ];
-        }
+        } */
 
         $damage->status="closed";
         $damage->closedBy_id=$closedBy->id;
