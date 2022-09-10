@@ -385,20 +385,23 @@ class DamageController extends Controller
             $confirmedCount=0;
             $closedCount=0;
             $dataIT=collect ([]);
-            $nameEquipment=$data[0]->equipment->name;
+            $nameEquipment=$equipment->name;
             for ($i=0; $i <count($data) ; $i++) {
+                if (count($data) == 0) {
+                } else {
+                    if ($data[$i]->damageType->department->id==1) {
+                        $dataIT->push($data[$i]);
+                        if($data[$i]->status=="on progress"){
+                            $damagedCount++;
+                        }
+                        else if($data[$i]->status=="resolved"){
+                            $confirmedCount++;
+                        }
+                        else if($data[$i]->status=="closed"){
+                            $closedCount++;
+                                      }
 
-                if ($data[$i]->damageType->department->id==1) {
-                    $dataIT->push($data[$i]);
-                    if($data[$i]->status=="on progress"){
-                        $damagedCount++;
-                    }
-                    else if($data[$i]->status=="resolved"){
-                        $confirmedCount++;
-                    }
-                    else if($data[$i]->status=="closed"){
-                        $closedCount++;
-                    }
+                  }
                 }
             }
             return [
@@ -433,9 +436,12 @@ class DamageController extends Controller
             $confirmedCount=0;
             $closedCount=0;
             $dataTEC=collect ([]);
-            $nameEquipment=$data[0]->equipment->name;
+            $nameEquipment=$equipment->name;
             for ($i=0; $i <count($data) ; $i++) {
-                if ($data[$i]->damageType->department->id==2) {
+                if (count($data) == 0) {
+
+                }else{
+                   if ($data[$i]->damageType->department->id==2) {
                     $dataTEC->push($data[$i]);
                     if($data[$i]->status=="on progress"){
                         $damagedCount++;
@@ -447,6 +453,8 @@ class DamageController extends Controller
                         $closedCount++;
                     }
                 }
+                }
+
             }
             return [
                 "payload" => $dataTEC,

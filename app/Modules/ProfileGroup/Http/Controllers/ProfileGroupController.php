@@ -416,6 +416,8 @@ class ProfileGroupController extends Controller
             $confirmedCount=0;
             $closedCount=0;
             $functionalEquipmnet=0;
+            $nonFunctionalEquipmnet=0;
+
             for ($k=0;$k<count($equipments);$k++){
                 $damages=$equipments[$k]->damages;
                 $ThisIsDamaged=false;
@@ -436,6 +438,7 @@ class ProfileGroupController extends Controller
                     $functionalEquipmnet++;
                 }
             }
+            $nonFunctionalEquipmnet=count($equipments)-$functionalEquipmnet;
             return [
                 "payload" => [
                     "id" => $profileGroup->id,
@@ -446,6 +449,7 @@ class ProfileGroupController extends Controller
                     "damagedCount" => $damagedCount,
                     "confirmedCount" => $confirmedCount,
                     "closedCount" => $closedCount,
+                    "nonFunctionalEquipmnet"=> $nonFunctionalEquipmnet,
                 ],
                 "status" => "200_1"
             ];
@@ -472,7 +476,7 @@ class ProfileGroupController extends Controller
             $closedCount=0;
             $functionalEquipmnet=0;
             $data=collect ([]);
-
+            $nonFunctionalEquipmnet=0;
             for ($i=0; $i < count($equipments); $i++) {
                 $damages=$equipments[$i]->damages()->with("declaredBy.fonction.department")
                 ->with("confirmedBy.fonction.department")
@@ -503,6 +507,8 @@ class ProfileGroupController extends Controller
                     $functionalEquipmnet++;
                 }
             }
+            $nonFunctionalEquipmnet=count($equipments)-$functionalEquipmnet;
+
             return [
                 "payload" => [
                     "departmentIT" => "IT",
@@ -514,6 +520,8 @@ class ProfileGroupController extends Controller
                     "damagedCount" => $damagedCount,
                     "confirmedCount" => $confirmedCount,
                     "closedCount" => $closedCount,
+                    "nonFunctionalEquipmnet"=> $nonFunctionalEquipmnet,
+
                 ],
                 "status" => "200_1"
             ];
@@ -539,6 +547,7 @@ class ProfileGroupController extends Controller
             $closedCount=0;
             $functionalEquipmnet=0;
             $data=collect ([]);
+            $nonFunctionalEquipmnet=0;
 
             for ($i=0; $i < count($equipments); $i++) {
                 $damages=$equipments[$i]->damages()->with("declaredBy.fonction.department")
@@ -570,6 +579,8 @@ class ProfileGroupController extends Controller
                     $functionalEquipmnet++;
                 }
             }
+            $nonFunctionalEquipmnet=count($equipments)-$functionalEquipmnet;
+
             return [
                 "payload" => [
                     "departmentIT" => "TEC",
@@ -581,6 +592,8 @@ class ProfileGroupController extends Controller
                     "damagedCount" => $damagedCount,
                     "confirmedCount" => $confirmedCount,
                     "closedCount" => $closedCount,
+                    "nonFunctionalEquipmnet"=> $nonFunctionalEquipmnet,
+
                 ],
                 "status" => "200_1"
             ];
