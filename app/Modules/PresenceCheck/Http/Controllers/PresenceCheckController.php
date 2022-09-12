@@ -64,12 +64,26 @@ class PresenceCheckController extends Controller
                 "status" => "406_2"
             ];
         }
-        $presenceCheck=PresenceCheck::make($request->all());
-        $presenceCheck->save();
-        return [
-            "payload" => $presenceCheck,
-            "status" => "200"
-        ];
+        
+        $presenceCheckc=PresenceCheck::query()
+            ->latest('id')
+            ->first();
+        if ($presenceCheckc->user_id==$request->user_id && $presenceCheckc->equipment_id==$request->equipment_id) {
+            return [
+                "payload" => "Test !",
+                "status" => "404_1"
+            ];
+        }else {
+            $presenceCheck=PresenceCheck::make($request->all());
+            $presenceCheck->save();
+            return [
+                "payload" => $presenceCheck,
+                "presenceCheckc" => $presenceCheckc,
+                "status" => "200"
+            ];
+        }
+
+
     }
     public function delete(Request $request){
         $presenceCheck=PresenceCheck::find($request->id);

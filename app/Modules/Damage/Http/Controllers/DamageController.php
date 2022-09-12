@@ -9,6 +9,8 @@ use App\Modules\Damage\Models\Photo;
 use App\Modules\DamageType\Models\DamageType;
 use App\Modules\Equipment\Models\Equipment;
 use App\Modules\ProfileGroup\Models\ProfileGroup;
+use App\Modules\PresenceCheck\Models\PresenceCheck;
+
 use App\Modules\User\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -82,8 +84,18 @@ class DamageController extends Controller
             $damage=Damage::make($request->damages[$i]);
             $damage->declaredAt=Carbon::now();
             $damage->shift=$request->shift;
-            $damage->driverIn=$request->driverIn;
-            $damage->driverOut=$request->driverOut;
+            $damage->driverIn=$request->damages[$i]['declaredBy_id'];
+             $driverOut=PresenceCheck::select()
+                ->where([
+                    ['user_id', '!=', $request->damages[$i]['declaredBy_id']],
+                    ['equipment_id', '=', $request->damages[$i]["equipment_id"]],
+                ])->orderBy('created_at', 'desc')
+                ->first();
+                if ($driverOut==null) {
+                    $damage->driverOut=null;
+                }else {
+                    $damage->driverOut=$driverOut->user_id;
+                }
             $damage->save();
             $damage->declaredBy=$damage->declaredBy()->with("fonction.department")->first();
             $damage->confirmedBy=$damage->confirmedBy()->with("fonction.department")->first();
@@ -97,6 +109,7 @@ class DamageController extends Controller
 
 
         return [
+            "driverOut" => $driverOut,
             "payload" => $declaredDamages,
             "status" => "200"
         ];
