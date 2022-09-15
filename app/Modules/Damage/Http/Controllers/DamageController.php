@@ -323,6 +323,7 @@ class DamageController extends Controller
             ->with("confirmedBy.fonction.department")
             ->with("closedBy.fonction.department")
             ->with("rejectedBy.fonction.department")
+            ->with("driverOut.fonction.department")
             ->with("equipment.profileGroup.department")
             ->with("damageType","damageType.profileGroup.department","damageType.department")
             ->with("photos")

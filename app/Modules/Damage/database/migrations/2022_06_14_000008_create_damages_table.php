@@ -21,8 +21,15 @@ class CreateDamagesTable extends Migration
             $table->text("description")->nullable();
             $table->text("resolveDescription")->nullable();
             $table->string("shift")->nullable();
-            $table->string("driverIn")->nullable();
-            $table->string("driverOut")->nullable();
+      
+
+            $table->bigInteger('driverOut')->unsigned()->nullable();
+            $table->foreign('driverOut')->references('id')->on('users')->onDelete('cascade');
+
+            $table->bigInteger('driverIn')->unsigned()->nullable();
+            $table->foreign('driverIn')->references('id')->on('users')->onDelete('cascade');
+
+
 
             $table->bigInteger('declaredBy_id')->unsigned()->nullable();
             $table->dateTime("declaredAt")->nullable();

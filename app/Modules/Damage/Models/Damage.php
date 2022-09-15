@@ -25,7 +25,9 @@ class Damage extends Model
     public function closedBy(){
         return $this->belongsTo(User::class,"closedBy_id");
     }
-
+    public function driverOut(){
+        return $this->belongsTo(User::class,"driverOut");
+    }
     public function rejectedBy(){
         return $this->belongsTo(User::class,"rejectedBy_id");
     }

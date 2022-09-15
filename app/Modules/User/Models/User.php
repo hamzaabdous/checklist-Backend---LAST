@@ -59,7 +59,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Damage::class,"rejectedBy_id");
     }
-
+    public function driverOut()
+    {
+        return $this->hasMany(Damage::class,"driverOut");
+    }
     protected $casts = [
         'created_at' => 'datetime:d/m/Y H:i',
         'updated_at' => 'datetime:d/m/Y H:i',
