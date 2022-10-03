@@ -64,6 +64,10 @@ class User extends Authenticatable
         return $this->hasMany(Damage::class,"driverOut");
     }
     protected $casts = [
+        'declaredAt' => 'datetime:d/m/Y H:i',
+        'confirmedAt' => 'datetime:d/m/Y H:i',
+        'closedAt' => 'datetime:d/m/Y H:i',
+        'rejectedAt' => 'datetime:d/m/Y H:i',
         'created_at' => 'datetime:d/m/Y H:i',
         'updated_at' => 'datetime:d/m/Y H:i',
 

@@ -100,6 +100,7 @@ class DamageController extends Controller
             $damage->declaredBy=$damage->declaredBy()->with("fonction.department")->first();
             $damage->confirmedBy=$damage->confirmedBy()->with("fonction.department")->first();
             $damage->closedBy=$damage->closedBy()->with("fonction.department")->first();
+            $damage->driver_out=$damage->driverOut()->with("fonction.department")->first();
             $damage->rejectedBy=$damage->rejectedBy()->with("fonction.department")->first();
             $damage->equipment=$damage->equipment()->with("profileGroup.department")->first();
             $damage->damageType=$damage->damageType()->with("profileGroup.department")->with("department")->first();
@@ -109,7 +110,7 @@ class DamageController extends Controller
 
 
         return [
-            "driverOut" => $driverOut,
+            "driverOut" => $damage->driverOut()->with("fonction.department")->first(),
             "payload" => $declaredDamages,
             "status" => "200"
         ];
@@ -160,6 +161,7 @@ class DamageController extends Controller
         $damage->declared_by=$damage->declaredBy()->with("fonction.department")->first();
         $damage->confirmed_by=$damage->confirmedBy()->with("fonction.department")->first();
         $damage->closed_by=$damage->closedBy()->with("fonction.department")->first();
+        $damage->driver_out=$damage->driverOut()->with("fonction.department")->first();
         $damage->rejected_by=$damage->rejectedBy()->with("fonction.department")->first();
         $damage->equipment=$damage->equipment()->with("profileGroup.department")->first();
         $damage->damage_type=$damage->damageType()->with("profileGroup.department")->with("department")->first();
@@ -212,6 +214,7 @@ class DamageController extends Controller
         $damage->declared_by=$damage->declaredBy()->with("fonction.department")->first();
         $damage->confirmed_by=$damage->confirmedBy()->with("fonction.department")->first();
         $damage->closed_by=$damage->closedBy()->with("fonction.department")->first();
+        $damage->driver_out=$damage->driverOut()->with("fonction.department")->first();
         $damage->rejected_by=$damage->rejectedBy()->with("fonction.department")->first();
         $damage->equipment=$damage->equipment()->with("profileGroup.department")->first();
         $damage->damage_type=$damage->damageType()->with("profileGroup.department")->with("department")->first();
@@ -266,6 +269,7 @@ class DamageController extends Controller
         $damage->declared_by=$damage->declaredBy()->with("fonction.department")->first();
         $damage->confirmed_by=$damage->confirmedBy()->with("fonction.department")->first();
         $damage->closed_by=$damage->closedBy()->with("fonction.department")->first();
+        $damage->driver_out=$damage->driverOut()->with("fonction.department")->first();
         $damage->rejected_by=$damage->rejectedBy()->with("fonction.department")->first();
         $damage->equipment=$damage->equipment()->with("profileGroup.department")->first();
         $damage->damage_type=$damage->damageType()->with("profileGroup.department")->with("department")->first();
@@ -275,7 +279,6 @@ class DamageController extends Controller
             "status" => "200"
         ];
     }
-
 
     public function getDamagesByProfileGroup($id){
         $profielGroup=ProfileGroup::select()->where('id', $id)->with("equipments")->first();
@@ -308,7 +311,6 @@ class DamageController extends Controller
             ];
         }
     }
-
 
     public function getDamagesByEquipments($id){
         $equipment=Equipment::select()->where('id', $id)->with("profileGroup")->first();
@@ -480,7 +482,6 @@ class DamageController extends Controller
             ];
         }
     }
-
 
     public function getDamagesByDeclareds($id){
         $declaredBy=User::select()->where('id', $id)->with("fonction")->first();
@@ -672,7 +673,6 @@ class DamageController extends Controller
         ];
     }
 
-
     public function delete(Request $request){
         $damage=Damage::find($request->id);
         if(!$damage){
@@ -695,6 +695,5 @@ class DamageController extends Controller
             ];
         }
     }
-
 
 }

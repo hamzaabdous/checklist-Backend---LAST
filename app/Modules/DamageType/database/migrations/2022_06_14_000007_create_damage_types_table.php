@@ -16,6 +16,7 @@ class CreateDamageTypesTable extends Migration
         Schema::create('damage_types', function (Blueprint $table) {
             $table->bigIncrements("id");
             $table->string("name");
+            $table->boolean("important");
             $table->bigInteger('profile_group_id')->unsigned();
             $table->foreign('profile_group_id')->references('id')->on('profile_groups')->onDelete('cascade');
             $table->bigInteger('department_id')->unsigned();

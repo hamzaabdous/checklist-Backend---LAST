@@ -63,7 +63,7 @@ class UserController extends Controller
             ];
         }
         $user=User::make($request->all());
-        $user->password="initial123";
+        $user->password="Initial123";
         $user->save();
         $user->fonction=$user->fonction;
         $user->fonction->department=$user->fonction->department;
@@ -159,7 +159,9 @@ class UserController extends Controller
         if(!$user || !Hash::check($request->password, $user->password)) {
             return [
                 "payload" => "Incorrect username or password !",
-                "status" => "401"
+                "status" => "401",
+                "user" => $user,
+
             ];
         }
         $token = $user->createToken($user->fonction->department->name.$user->fonction->name,[$user->fonction->department->name.$user->fonction->name])->plainTextToken;
