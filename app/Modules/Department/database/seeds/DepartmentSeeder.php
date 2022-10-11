@@ -21,6 +21,7 @@ class DepartmentSeeder extends Seeder
     {
         $department = new Department();
         $department->name="IT";
+        $department->email="hamza.saqalli@tangeralliance.com,ayoub.bencheikh@tangeralliance.com,fayssal.ourezzouq@tangeralliance.com";
         $department->save();
 
         //-----------------------------
@@ -49,6 +50,7 @@ class DepartmentSeeder extends Seeder
 
         $department = new Department();
         $department->name="TECHNIQUE";
+        $department->email="yassin.yaddouch@tangeralliance.com,badreddine.ennaciri@tangeralliance.com,mustafa.bouirig@tangeralliance.com";
         $department->save();
         //-----------------------------
 
@@ -75,6 +77,7 @@ class DepartmentSeeder extends Seeder
 
         $department = new Department();
         $department->name="OPERATIONS";
+        $department->email="foreman@tangeralliance.com,shiftmanager@tangeralliance.com,iliass.errabai@tangeralliance.com";
         $department->save();
         //-----------------------------
         $fonction= new Fonction();
