@@ -17,6 +17,7 @@ class Department extends Model
     {
         return $this->hasMany(Fonction::class);
     }
+    
     public function damageTypes()
     {
         return $this->hasMany(DamageType::class);

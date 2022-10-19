@@ -24,6 +24,7 @@ Route::group([
     Route::post('/update', [UserController::class, 'update']);
     Route::post('/delete', [UserController::class, 'delete']);
     Route::post('/changePassword', [UserController::class, 'changePassword']);
+    Route::post('/resetPassword', [UserController::class, 'resetPassword']);
 
 });
 

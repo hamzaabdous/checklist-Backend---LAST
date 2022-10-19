@@ -112,7 +112,6 @@ class UserController extends Controller
         $user->lastName=$request->lastName;
         $user->firstName=$request->firstName;
         $user->email=$request->email;
-        $user->password=$request->password;
         $user->phoneNumber=$request->phoneNumber;
         $user->fonction_id=$request->fonction_id;
 
@@ -212,6 +211,25 @@ class UserController extends Controller
 
 
         $user->password=$request->password;
+
+        $user->save();
+        return [
+            "payload" => $user,
+            "status" => "200"
+        ];
+    }
+    public function resetPassword(Request $request){
+
+       
+        $user=User::find($request->id);
+        if (!$user) {
+            return [
+                "payload" => "The searched row does not exist !",
+                "status" => "404"
+            ];
+        }
+
+        $user->password="Initial123";
 
         $user->save();
         return [
