@@ -83,7 +83,7 @@ class DamageController extends Controller
             }
             $damage=Damage::make($request->damages[$i]);
             $damage->declaredAt=Carbon::now();
-            $damage->shift=$request->shift;
+            $damage->shift=$request->damages[$i]['shift'];
             $damage->driverIn=$request->damages[$i]['declaredBy_id'];
              $driverOut=PresenceCheck::select()
                 ->where([
