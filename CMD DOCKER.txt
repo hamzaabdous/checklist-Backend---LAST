@@ -1,0 +1,9 @@
+1 - docker-compose build --no-cache checklist
+2 - docker-compose up -d
+
+
+# chown -R $USER:www storage
+# chown -R $USER:www bootstrap/cache
+# chmod -R 775 storage
+# chmod -R 775 bootstrap/cache
+#
