@@ -21,6 +21,7 @@ Route::group([
     Route::get('/', [UserController::class, 'index']);
     Route::get('/{id}', [UserController::class, 'get']);
     Route::post('/create', [UserController::class, 'create']);
+    Route::post('/addArrayUsers', [UserController::class, 'addArrayUsers']);
     Route::post('/update', [UserController::class, 'update']);
     Route::post('/delete', [UserController::class, 'delete']);
     Route::post('/changePassword', [UserController::class, 'changePassword']);

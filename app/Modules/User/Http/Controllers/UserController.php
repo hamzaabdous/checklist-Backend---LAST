@@ -8,6 +8,9 @@ use App\Modules\User\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+use \stdClass;
+use App\Modules\ProfileGroup\Models\ProfileGroup;
 
 
 class UserController extends Controller
@@ -70,6 +73,64 @@ class UserController extends Controller
 
         return [
             "payload" => $user,
+            "status" => "200"
+        ];
+    }
+
+    public function addArrayUsers(Request $request){
+
+        for ($i=0; $i <count($request->users) ; $i++) 
+        { 
+            /* $validator = Validator::make($request->users[$i], [
+            "username" => "required|string|unique:users,username",
+            "fonction_id" => "required",
+            ]); */
+            /* if ($validator->fails()) {
+                return [
+                    "payload" => $validator->errors(),
+                    "status" => "406_2"
+                ];
+            } */
+            $fonction=Fonction::find($request->users[$i]["fonction_id"]);
+            if(!$fonction){
+                return [
+                    "payload"=>"fonction is not exist !",
+                    "status"=>"fonction_404",
+                ];
+            }
+            $user=User::make($request->users[$i]);
+            $user->password="Initial123";
+            
+            $user->save();
+            $user->fonction=$user->fonction;
+            $user->fonction->department=$user->fonction->department;
+
+
+            // add profile groups into  user
+            
+            $profilegroupList = explode(',', $request->users[$i]["profilegroup"]);
+
+            for ($j=0; $j <count($profilegroupList) ; $j++) { 
+
+                $profileGroup=ProfileGroup::find($profilegroupList[$j]);
+              //  $profileGroup=DB::table('profile_groups')->where('name', $profilegroupList[$j])->get();
+                if(!$profileGroup){
+                    return [
+                        "payload"=>"Profile Group is not exist !",
+                        "status"=>"profileGroup_404",
+                    ];
+                }
+                $profileGroup->users()->attach($user);
+                $user->profileGroups=$user->profileGroups;
+
+            }
+            
+
+        }
+        
+
+        return [
+            "payload" => "done",
             "status" => "200"
         ];
     }
