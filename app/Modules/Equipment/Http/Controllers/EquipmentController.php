@@ -7,9 +7,135 @@ use App\Modules\Equipment\Models\Equipment;
 use App\Modules\ProfileGroup\Models\ProfileGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class EquipmentController extends Controller
 {
+
+
+/////////
+
+/* public function getActualShift(){
+    $thisDate = date("2022-02-16T06:30:00");
+    $nowDate = Carbon::now();
+    $shift = ["D", "A", "B", "C"];
+    $momentDate = moment($thisDate);
+    
+    while ($momentDate.add(72, "hours").toDate() < $nowDate) {
+      $shift = this.shiftArrays($shift);
+    }
+
+    if (( ($nowDate.getHours()==6 && $nowDate.getMinutes() >= 30) || ($nowDate.getHours() >= 7 ) ) &&
+     ( ($nowDate.getHours()==14 && $nowDate.getMinutes() < 30) || ($nowDate.getHours() < 15 ) )) return $shift[0];
+
+    else if (( ($nowDate.getHours()==14 && $nowDate.getMinutes() >= 30) || ($nowDate.getHours() >= 15 ) ) &&
+     ( ($nowDate.getHours()==22 && $nowDate.getMinutes() < 30) || ($nowDate.getHours() < 23 ) ))
+      return $shift[1];
+    else if (
+       ($nowDate.getHours()==22 && $nowDate.getMinutes() >= 30) ||
+      ($nowDate.getHours() >= 0 && ($nowDate.getHours() < 6 && $nowDate.getMinutes() < 30))
+    )
+      return $shift[2];
+    
+}
+
+public function shiftArrays($array){
+    $c = "";
+    $arrayC = array();
+    $arrayC[3] = $arrayC[2];
+    $arrayC[2] = $arrayC[1];
+    $arrayC[1] = $arrayC[0];
+    $arrayC[0] = $c;
+
+    return $arrayC;
+    
+} */
+
+public function EquipmentsCheckedByEquipment($equipment_id){
+    
+    //$currentDate=Carbon::now();
+    $currentDate=Carbon::now()->addHour(1);
+    if (("06:30:00"<$currentDate->format('H:i:s') && $currentDate->format('H:i:s')<"14:30:00")) {
+        $timeFrom=$currentDate->format('Y-m-d'). " 06:30:00";
+        $timeTo=$currentDate->format('Y-m-d') . " 14:30:00";
+        return ProfileGroup::getEquipmentsCheckedByEquipment($timeFrom,$timeTo,$equipment_id);
+
+        return [
+            'timeFrom' => $timeFrom,
+            'timeTo' => $timeTo,
+
+        ];
+    }
+    else if ("14:30:00"<$currentDate->format('H:i:s') && $currentDate->format('H:i:s')<"22:30:00") {
+       
+        $timeFrom=$currentDate->format('Y-m-d'). " 14:30:00";
+        $timeTo=$currentDate->format('Y-m-d') . " 22:30:00";
+        return ProfileGroup::getEquipmentsCheckedByEquipment($timeFrom,$timeTo,$equipment_id);
+
+        return [
+            'timeFrom' => $timeFrom,
+            'timeTo' => $timeTo,
+
+        ];
+    }
+    else if ((("22:30:00"<$currentDate->format('H:i:s') && $currentDate->format('H:i:s')<"00:00:00")) || ("00:00:00"<$currentDate->format('H:i:s') && $currentDate->format('H:i:s')<"06:30:00")){
+        $timeFrom=$currentDate->format('Y-m-d'). " 22:30:00";
+        $timeTo=$currentDate->format('Y-m-d') . " 06:30:00";
+        return ProfileGroup::getEquipmentsCheckedByEquipment($timeFrom,$timeTo,$equipment_id);
+        return [
+            'timeFrom' => $timeFrom,
+            'timeTo' => $timeTo,
+
+        ];
+    }
+
+    
+}
+
+public function EquipmentsCheckedByProfileGroup($profile_groups_id){
+    
+    //$currentDate=Carbon::now();
+    $currentDate=Carbon::now()->addHour(1);
+    if (("06:30:00"<$currentDate->format('H:i:s') && $currentDate->format('H:i:s')<"14:30:00")) {
+        $timeFrom=$currentDate->format('Y-m-d'). " 06:30:00";
+        $timeTo=$currentDate->format('Y-m-d') . " 14:30:00";
+        return ProfileGroup::getEquipmentsCheckedByEquipment($timeFrom,$timeTo,$profile_groups_id);
+
+        return [
+            'timeFrom' => $timeFrom,
+            'timeTo' => $timeTo,
+
+        ];
+    }
+    else if ("14:30:00"<$currentDate->format('H:i:s') && $currentDate->format('H:i:s')<"22:30:00") {
+       
+        $timeFrom=$currentDate->format('Y-m-d'). " 14:30:00";
+        $timeTo=$currentDate->format('Y-m-d') . " 22:30:00";
+        return ProfileGroup::getEquipmentsCheckedByEquipment($timeFrom,$timeTo,$profile_groups_id);
+
+        return [
+            'timeFrom' => $timeFrom,
+            'timeTo' => $timeTo,
+
+        ];
+    }
+    else if ((("22:30:00"<$currentDate->format('H:i:s') && $currentDate->format('H:i:s')<"00:00:00")) || ("00:00:00"<$currentDate->format('H:i:s') && $currentDate->format('H:i:s')<"06:30:00")){
+        $timeFrom=$currentDate->format('Y-m-d'). " 22:30:00";
+        $timeTo=$currentDate->format('Y-m-d') . " 06:30:00";
+        return ProfileGroup::getEquipmentsCheckedByEquipment($timeFrom,$timeTo,$profile_groups_id);
+        return [
+            'timeFrom' => $timeFrom,
+            'timeTo' => $timeTo,
+
+        ];
+    }
+
+    
+}
+/////////
+
+
+
 
     public function index(){
 
@@ -148,6 +274,9 @@ class EquipmentController extends Controller
             $damagedCount=0;
             $confirmedCount=0;
             $closedCount=0;
+            $ceriticalDefectsCount=0;
+            $isShecked=false;
+
             $damages=$equipments[$i]->damages;
             for ($k=0;$k<count($damages);$k++){
                 if($damages[$k]->status=="on progress"){
@@ -159,13 +288,22 @@ class EquipmentController extends Controller
                 if($damages[$k]->status=="closed"){
                     $closedCount++;
                 }
+                if ($damages[$k]->damageType->important ==1) {
+                    $ceriticalDefectsCount++;
+                }
+                $test=$this->EquipmentsCheckedByEquipment($damages[$k]->equipment->id);
+                    if ($test >=1) {
+                        $isShecked=true;
+                    }
             }
             array_push($counters,[
                 "id" => $equipments[$i]->id,
                 "nameEquipment" => $equipments[$i]->name,
+                "isShecked" => $isShecked,
                 "damagedCount" => $damagedCount,
                 "confirmedCount" => $confirmedCount,
                 "closedCount" => $closedCount,
+                "ceriticalDefectsCount" => $ceriticalDefectsCount,
             ]);
         }
 
@@ -192,6 +330,8 @@ class EquipmentController extends Controller
             $damagedCount=0;
             $confirmedCount=0;
             $closedCount=0;
+            $ceriticalDefectsCount=0;
+
             $damages=$equipments[$i]->damages()->with("declaredBy.fonction.department")
             ->with("confirmedBy.fonction.department")
             ->with("closedBy.fonction.department")
@@ -211,6 +351,9 @@ class EquipmentController extends Controller
                     }
                     else if($damages[$j]->status=="closed"){
                         $closedCount++;
+                    }
+                    if ($damages[$j]->damageType->important ==1) {
+                        $ceriticalDefectsCount++;
                     }
                 }
             }
@@ -247,6 +390,9 @@ class EquipmentController extends Controller
             $damagedCount=0;
             $confirmedCount=0;
             $closedCount=0;
+            $ceriticalDefectsCount=0;
+            $isShecked=false;
+
             $damages=$equipments[$i]->damages()->with("declaredBy.fonction.department")
             ->with("confirmedBy.fonction.department")
             ->with("closedBy.fonction.department")
@@ -265,14 +411,22 @@ class EquipmentController extends Controller
                     else if($damages[$j]->status=="closed"){
                         $closedCount++;
                     }
+                    if ($damages[$j]->damageType->important ==1) {
+                        $ceriticalDefectsCount++;
+                    }
+                    
+                    
                 }
             }
             array_push($counters,[
                 "id" => $equipments[$i]->id,
                 "nameEquipment" => $equipments[$i]->name,
+                "isShecked" => $isShecked,
                 "damagedCount" => $damagedCount,
                 "confirmedCount" => $confirmedCount,
                 "closedCount" => $closedCount,
+                "ceriticalDefectsCount" => $ceriticalDefectsCount,
+
             ]);
         }
 

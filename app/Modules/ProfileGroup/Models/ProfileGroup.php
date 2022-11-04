@@ -31,7 +31,36 @@ class ProfileGroup extends Model
     public function department(){
         return $this->belongsTo(Department::class);
     }
+    public static function getEquipmentsChecked($from,$to){
+        return ProfileGroup::select('profile_groups.name as profile_group', 'equipments.name as equipment','presence_checks.created_at as checked_at','users.username')
+            ->join('equipments',"equipments.profile_group_id","=","profile_groups.id")
+            ->join('presence_checks',"equipments.id","=","presence_checks.equipment_id")
+            ->join('users',"users.id","=","presence_checks.user_id")
+            ->whereBetween('presence_checks.created_at', [$from, $to])
+            ->get();
+    }
+    public static function getEquipmentsCheckedByProfileGroup($from,$to,$profile_groups_id){
+        return ProfileGroup::select('profile_groups.name as profile_group', 'equipments.name as equipment','users.username')
+            ->join('equipments',"equipments.profile_group_id","=","profile_groups.id")
+            ->join('presence_checks',"equipments.id","=","presence_checks.equipment_id")
+            ->join('users',"users.id","=","presence_checks.user_id")
+            ->whereBetween('presence_checks.created_at', [$from, $to])
+            ->where('profile_groups.id', $profile_groups_id)
+            ->distinct('equipments.name')
+            ->count();
 
+           // ->get();
+    }
+    public static function getEquipmentsCheckedByEquipment($from,$to,$equipment_id){
+        return ProfileGroup::select('profile_groups.name as profile_group', 'equipments.name as equipment','presence_checks.created_at as checked_at','users.username')
+            ->join('equipments',"equipments.profile_group_id","=","profile_groups.id")
+            ->join('presence_checks',"equipments.id","=","presence_checks.equipment_id")
+            ->join('users',"users.id","=","presence_checks.user_id")
+            ->whereBetween('presence_checks.created_at', [$from, $to])
+            ->where('equipments.id', $equipment_id)
+            ->count();
+            //->get();
+    }
     protected $casts = [
         'declaredAt' => 'datetime:d/m/Y H:i',
         'confirmedAt' => 'datetime:d/m/Y H:i',

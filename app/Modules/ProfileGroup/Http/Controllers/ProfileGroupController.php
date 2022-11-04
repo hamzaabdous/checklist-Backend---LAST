@@ -9,9 +9,61 @@ use App\Modules\ProfileGroup\Models\ProfileGroup;
 use App\Modules\User\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class ProfileGroupController extends Controller
 {
+
+/////////////
+
+public function EquipmentsCheckedByProfileGroup($profile_groups_id){
+    
+    //$currentDate=Carbon::now();
+    $currentDate=Carbon::now()->addHour(1);
+    if (("06:30:00"<$currentDate->format('H:i:s') && $currentDate->format('H:i:s')<"14:30:00")) {
+        $timeFrom=$currentDate->format('Y-m-d'). " 06:30:00";
+        $timeTo=$currentDate->format('Y-m-d') . " 14:30:00";
+        return ProfileGroup::getEquipmentsCheckedByProfileGroup($timeFrom,$timeTo,$profile_groups_id);
+
+        return [
+            'timeFrom' => $timeFrom,
+            'timeTo' => $timeTo,
+
+        ];
+    }
+    else if ("14:30:00"<$currentDate->format('H:i:s') && $currentDate->format('H:i:s')<"22:30:00") {
+       
+        $timeFrom=$currentDate->format('Y-m-d'). " 14:30:00";
+        $timeTo=$currentDate->format('Y-m-d') . " 22:30:00";
+        return ProfileGroup::getEquipmentsCheckedByProfileGroup($timeFrom,$timeTo,$profile_groups_id);
+
+        return [
+            'timeFrom' => $timeFrom,
+            'timeTo' => $timeTo,
+
+        ];
+    }
+    else if ((("22:30:00"<$currentDate->format('H:i:s') && $currentDate->format('H:i:s')<"00:00:00")) || ("00:00:00"<$currentDate->format('H:i:s') && $currentDate->format('H:i:s')<"06:30:00")){
+        $timeFrom=$currentDate->format('Y-m-d'). " 22:30:00";
+        $timeTo=$currentDate->format('Y-m-d') . " 06:30:00";
+        return ProfileGroup::getEquipmentsCheckedByProfileGroup($timeFrom,$timeTo,$profile_groups_id);
+        return [
+            'timeFrom' => $timeFrom,
+            'timeTo' => $timeTo,
+
+        ];
+    }
+
+    
+}
+
+
+
+////////////
+
+
+
+
 
     public function index(){
 
@@ -241,13 +293,19 @@ class ProfileGroupController extends Controller
     public function getProfileGroupsByCounters(){
         $profileGroups=ProfileGroup::all();
         $counters=[];
-
+        
         for ($i=0;$i<count($profileGroups);$i++){
             $equipment=$profileGroups[$i]->equipments;
             $damagedCount=0;
             $confirmedCount=0;
             $closedCount=0;
             $functionalEquipmnet=0;
+            $equipmentCheckedCount=0;
+            if ($this->EquipmentsCheckedByProfileGroup($profileGroups[$i]->id) == null) {
+                
+                $equipmentCheckedCount=0;
+            }else $equipmentCheckedCount=$this->EquipmentsCheckedByProfileGroup($profileGroups[$i]->id);
+
             for ($k=0;$k<count($equipment);$k++){
                 $damages=$equipment[$k]->damages;
                 $ThisIsDamaged=false;
@@ -263,6 +321,7 @@ class ProfileGroupController extends Controller
                     else if($damages[$j]->status=="closed"){
                         $closedCount++;
                     }
+                   
                 }
                 if(!$ThisIsDamaged){
                     $functionalEquipmnet++;
@@ -271,6 +330,7 @@ class ProfileGroupController extends Controller
             array_push($counters,[
                 "id" => $profileGroups[$i]->id,
                 "name" => $profileGroups[$i]->name,
+                "equipmentCheckedCount" => $equipmentCheckedCount,
                 "department_id" => $profileGroups[$i]->department->id,
                 "equipmentsCount" => count($equipment),
                 "functionalEquipmnet" => $functionalEquipmnet,
@@ -354,6 +414,8 @@ class ProfileGroupController extends Controller
             $confirmedCount=0;
             $closedCount=0;
             $functionalEquipmnet=0;
+            $equipmentChecked=0;
+
             for ($k=0;$k<count($equipment);$k++){
                 $damages=$equipment[$k]->damages()->with("declaredBy.fonction.department")
                 ->with("confirmedBy.fonction.department")

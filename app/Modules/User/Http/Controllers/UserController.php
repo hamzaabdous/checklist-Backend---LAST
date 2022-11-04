@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use \stdClass;
 use App\Modules\ProfileGroup\Models\ProfileGroup;
+use Carbon\Carbon;
 
 
 class UserController extends Controller
@@ -66,7 +67,7 @@ class UserController extends Controller
             ];
         }
         $user=User::make($request->all());
-        $user->password="Initial123";
+       // $user->password="Initial123";
         $user->save();
         $user->fonction=$user->fonction;
         $user->fonction->department=$user->fonction->department;
@@ -99,7 +100,7 @@ class UserController extends Controller
                 ];
             }
             $user=User::make($request->users[$i]);
-            $user->password="Initial123";
+           // $user->password="Initial123";
             
             $user->save();
             $user->fonction=$user->fonction;
@@ -229,9 +230,14 @@ class UserController extends Controller
         $user->fonction->department=$user->fonction->department;
         $user->profileGroups= $user->profileGroups()->with('department')->get();
 
+        $dateNow=Carbon::now()->format('Y/m/d H:i');
+       // $dateLogin=Carbon::createFromFormat('Y-m-d H', $dateNow)->toDateTimeString();
         $response = [
             'user' => $user,
-            'token' => $token
+            'token' => $token,
+            'dateLogin' => $dateNow,
+            'dateLogout' => Carbon::now()->addHour(8)->format('Y/m/d H:i')
+
         ];
 
         return [

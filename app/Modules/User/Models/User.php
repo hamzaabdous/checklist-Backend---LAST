@@ -70,6 +70,7 @@ class User extends Authenticatable
         'rejectedAt' => 'datetime:d/m/Y H:i',
         'created_at' => 'datetime:d/m/Y H:i',
         'updated_at' => 'datetime:d/m/Y H:i',
+        'dateLogin' => 'datetime:Y/m/d H:i',
 
     ];
 

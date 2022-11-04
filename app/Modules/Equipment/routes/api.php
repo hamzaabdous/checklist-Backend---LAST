@@ -21,4 +21,8 @@ Route::group([
     Route::post('/create', [EquipmentController::class, 'create']);
     Route::post('/update', [EquipmentController::class, 'update']);
     Route::post('/delete', [EquipmentController::class, 'delete']);
+
+
+    Route::post('/all', [EquipmentController::class, 'EquipmentsCheckedByEquipment']);
+
 });
