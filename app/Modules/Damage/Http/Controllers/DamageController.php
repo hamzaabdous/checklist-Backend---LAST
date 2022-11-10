@@ -28,7 +28,6 @@ class DamageController extends Controller
             ->with("rejectedBy.fonction.department")
             ->with("equipment.profileGroup.department")
             ->with("damageType","damageType.profileGroup.department","damageType.department")
-            ->with("photos")
             ->get();
 
         return [
@@ -670,12 +669,6 @@ class DamageController extends Controller
         ];
     }
 
-    public function sendDamagePhotosStoragePath(){
-        return [
-            "payload" => asset("/storage/cdn/damagePhotos/"),
-            "status" => "200_1"
-        ];
-    }
 
     public function delete(Request $request){
         $damage=Damage::find($request->id);

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePhotos extends Migration
+class CreatePhotosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,10 +15,9 @@ class CreatePhotos extends Migration
     {
         Schema::create('photos', function (Blueprint $table) {
             $table->bigIncrements("id");
-            $table->string("description")->nullable();
             $table->string("filename");
-            $table->bigInteger('damage_id')->unsigned()->nullable();
-            $table->foreign('damage_id')->references('id')->on('damages')->onDelete('cascade');
+            $table->bigInteger('comment_id')->unsigned()->nullable();
+            $table->foreign('comment_id')->references('id')->on('comments')->onDelete('cascade');
             $table->timestamps();
         });
     }
