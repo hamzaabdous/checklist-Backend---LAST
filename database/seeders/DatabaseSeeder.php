@@ -209,7 +209,14 @@ class DatabaseSeeder extends Seeder
         $damageType->save();
 
         $damageType=new DamageType();
-        $damageType->name="Radio & Tablet";
+        $damageType->name="Radio";
+        $damageType->important=false;
+        $damageType->profile_group_id=$profileGroup->id;
+        $damageType->department_id=$ITDepartment->id;
+        $damageType->save();
+
+        $damageType=new DamageType();
+        $damageType->name="Tablet";
         $damageType->important=false;
         $damageType->profile_group_id=$profileGroup->id;
         $damageType->department_id=$ITDepartment->id;
@@ -477,7 +484,14 @@ class DatabaseSeeder extends Seeder
         $damageType->save();
 
         $damageType=new DamageType();
-        $damageType->name="Radio & Tablet ";
+        $damageType->name="Radio";
+        $damageType->important=false;
+        $damageType->profile_group_id=$profileGroup->id;
+        $damageType->department_id=$ITDepartment->id;
+        $damageType->save();
+
+        $damageType=new DamageType();
+        $damageType->name="Tablet";
         $damageType->important=false;
         $damageType->profile_group_id=$profileGroup->id;
         $damageType->department_id=$ITDepartment->id;
@@ -743,7 +757,14 @@ class DatabaseSeeder extends Seeder
         $damageType->save();
 
         $damageType=new DamageType();
-        $damageType->name="Radio & Tablet ";
+        $damageType->name="Radio";
+        $damageType->important=false;
+        $damageType->profile_group_id=$profileGroup->id;
+        $damageType->department_id=$ITDepartment->id;
+        $damageType->save();
+
+        $damageType=new DamageType();
+        $damageType->name="Tablet";
         $damageType->important=false;
         $damageType->profile_group_id=$profileGroup->id;
         $damageType->department_id=$ITDepartment->id;
@@ -1193,7 +1214,14 @@ class DatabaseSeeder extends Seeder
         $damageType->save();
 
         $damageType=new DamageType();
-        $damageType->name="Radio & Tablet ";
+        $damageType->name="Radio";
+        $damageType->important=false;
+        $damageType->profile_group_id=$profileGroup->id;
+        $damageType->department_id=$ITDepartment->id;
+        $damageType->save();
+
+        $damageType=new DamageType();
+        $damageType->name="Tablet";
         $damageType->important=false;
         $damageType->profile_group_id=$profileGroup->id;
         $damageType->department_id=$ITDepartment->id;
@@ -1416,7 +1444,14 @@ class DatabaseSeeder extends Seeder
         $damageType->save();
 
         $damageType=new DamageType();
-        $damageType->name="Radio & Tablet ";
+        $damageType->name="Radio";
+        $damageType->important=false;
+        $damageType->profile_group_id=$profileGroup->id;
+        $damageType->department_id=$ITDepartment->id;
+        $damageType->save();
+
+        $damageType=new DamageType();
+        $damageType->name="Tablet";
         $damageType->important=false;
         $damageType->profile_group_id=$profileGroup->id;
         $damageType->department_id=$ITDepartment->id;
@@ -1777,12 +1812,7 @@ class DatabaseSeeder extends Seeder
         $damageType->department_id=$TechniqueDepartment->id;
         $damageType->save();
 
-        $damageType=new DamageType();
-        $damageType->name="Interior mirror";
-        $damageType->important=false;
-        $damageType->profile_group_id=$profileGroup->id;
-        $damageType->department_id=$TechniqueDepartment->id;
-        $damageType->save();
+        
 
         $damageType=new DamageType();
         $damageType->name="Seats and accessories";

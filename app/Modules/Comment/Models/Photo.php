@@ -9,6 +9,8 @@ use App\Modules\Comment\Models\Comment;
 class Photo extends Model
 {
     use HasFactory;
+    protected $guarded=["id"];
+
     public function Comment(){
         return $this->belongTo(Comment::class);
     }

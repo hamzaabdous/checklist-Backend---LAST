@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Modules\User\Models\User;
 use App\Modules\Damage\Models\Damage;
 use App\Modules\Comment\Models\Photo;
+use App\Modules\Comment\Models\Comment;
+use Illuminate\Support\Facades\Validator;
+
 use App\Libs\UploadTrait;
 
 class CommentController extends Controller
@@ -14,9 +17,14 @@ class CommentController extends Controller
     use UploadTrait;
 
     public function index($id){
-
+        $damage=Damage::find($id);
+        if(!$damage){
+            return [
+                "payload"=>"damage is not exist !",
+                "status"=>"damage_404",
+            ];
+        }
         $comments=Comment::with('user')
-        ->with('damage')
         ->with('photos')
         ->where("damage_id",$id)
         ->get();
@@ -127,7 +135,7 @@ class CommentController extends Controller
                 "status"=>"user_404",
             ];
         }
-        $comment->status=$request->status;
+        $comment->status=$comment->status;
         $comment->comment=$request->comment;
         $comment->save();
         $comment->damage=$comment->damage;
@@ -165,7 +173,7 @@ class CommentController extends Controller
         }
     }
 
-    public function addPhotos(){
+    public function addPhotos(Request $request){
         $validator = Validator::make($request->all(), [
             "comment_id" => "required",
         ]);
@@ -173,6 +181,13 @@ class CommentController extends Controller
             return [
                 "payload" => $validator->errors(),
                 "status" => "406_2"
+            ];
+        }
+        $comment=Comment::find($request->comment_id);
+        if(!$comment){
+            return [
+                "payload"=>"comment is not exist !",
+                "status"=>"user_404",
             ];
         }
         if($request->file()) {
@@ -186,9 +201,14 @@ class CommentController extends Controller
                 $photo->save();
             }
         }
+        $comment->photos=$comment->photos;
+        return [
+            "payload"=>$comment->photos,
+            "status"=>"200",
+        ];
     }
 
-    public function deletePhoto(){
+    public function deletePhoto(Request $request){
         $validator = Validator::make($request->all(), [
             "id" => "required",
         ]);
@@ -209,8 +229,13 @@ class CommentController extends Controller
             
             $this->deleteOne(config('cdn.damagePhotos.path'),$photo->filename);
             $photo->delete();
+
+            $comment=Comment::find($request->comment_id);
+
+
             return [
-                "payload" => "Deleted successfully",
+                "payload" => $comment->photos,
+                "status Delete" => "Deleted successfully",
                 "status" => "200_4"
             ];
         }
