@@ -14,4 +14,10 @@ class Photo extends Model
     public function Comment(){
         return $this->belongTo(Comment::class);
     }
+
+    protected $casts = [
+        
+        'created_at' => 'datetime:d/m/Y H:i',
+        'updated_at' => 'datetime:d/m/Y H:i',
+    ];
 }

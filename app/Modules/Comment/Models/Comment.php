@@ -22,4 +22,10 @@ class Comment extends Model
     public function photos(){
         return $this->hasMany(Photo::class);
     }
+
+    protected $casts = [
+        
+        'created_at' => 'datetime:d/m/Y H:i',
+        'updated_at' => 'datetime:d/m/Y H:i',
+    ];
 }
