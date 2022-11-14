@@ -28,7 +28,6 @@ class DamageController extends Controller
             ->with("rejectedBy.fonction.department")
             ->with("equipment.profileGroup.department")
             ->with("damageType","damageType.profileGroup.department","damageType.department")
-            ->with("photos")
             ->get();
 
         return [
@@ -104,7 +103,7 @@ class DamageController extends Controller
             $damage->rejectedBy=$damage->rejectedBy()->with("fonction.department")->first();
             $damage->equipment=$damage->equipment()->with("profileGroup.department")->first();
             $damage->damageType=$damage->damageType()->with("profileGroup.department")->with("department")->first();
-            $damage->photos=$damage->photos;
+            
             array_push($declaredDamages,$damage);
         }
 
@@ -165,7 +164,7 @@ class DamageController extends Controller
         $damage->rejected_by=$damage->rejectedBy()->with("fonction.department")->first();
         $damage->equipment=$damage->equipment()->with("profileGroup.department")->first();
         $damage->damage_type=$damage->damageType()->with("profileGroup.department")->with("department")->first();
-        $damage->photos=$damage->photos;
+        
         return [
             "payload" => $damage,
             "status" => "200"
@@ -218,7 +217,7 @@ class DamageController extends Controller
         $damage->rejected_by=$damage->rejectedBy()->with("fonction.department")->first();
         $damage->equipment=$damage->equipment()->with("profileGroup.department")->first();
         $damage->damage_type=$damage->damageType()->with("profileGroup.department")->with("department")->first();
-        $damage->photos=$damage->photos;
+        
         return [
             "payload" => $damage,
             "status" => "200"
@@ -273,7 +272,7 @@ class DamageController extends Controller
         $damage->rejected_by=$damage->rejectedBy()->with("fonction.department")->first();
         $damage->equipment=$damage->equipment()->with("profileGroup.department")->first();
         $damage->damage_type=$damage->damageType()->with("profileGroup.department")->with("department")->first();
-        $damage->photos=$damage->photos;
+        
         return [
             "payload" => $damage,
             "status" => "200"
@@ -300,7 +299,7 @@ class DamageController extends Controller
                     ->with("rejectedBy.fonction.department")
                     ->with("equipment.profileGroup.department")
                     ->with("damageType","damageType.profileGroup.department","damageType.department")
-                    ->with("photos")
+                    
                     ->get()
                     ->toArray();
                 $damages=array_merge($damages,$thisDamages);
@@ -329,7 +328,7 @@ class DamageController extends Controller
             ->with("driverOut.fonction.department")
             ->with("equipment.profileGroup.department")
             ->with("damageType","damageType.profileGroup.department","damageType.department")
-            ->with("photos")
+            
             ->get();
             return [
                 "payload" => $data,
@@ -356,7 +355,7 @@ class DamageController extends Controller
             ->with("rejectedBy.fonction.department")
             ->with("equipment.profileGroup.department")
             ->with("damageType","damageType.profileGroup.department","damageType.department")
-            ->with("photos")
+            
             ->get();
 
             for ($i=0; $i < count($data) ; $i++) {
@@ -398,7 +397,7 @@ class DamageController extends Controller
             ->with("rejectedBy.fonction.department")
             ->with("equipment.profileGroup.department")
             ->with("damageType","damageType.profileGroup.department","damageType.department")
-            ->with("photos")
+            
             ->get();
             $damagedCount=0;
             $confirmedCount=0;
@@ -450,7 +449,7 @@ class DamageController extends Controller
             ->with("rejectedBy.fonction.department")
             ->with("equipment.profileGroup.department")
             ->with("damageType","damageType.profileGroup.department","damageType.department")
-            ->with("photos")
+            
             ->get();
             $damagedCount=0;
             $confirmedCount=0;
@@ -503,7 +502,7 @@ class DamageController extends Controller
                     ->with("rejectedBy.fonction.department")
                     ->with("equipment.profileGroup.department")
                     ->with("damageType","damageType.profileGroup.department","damageType.department")
-                    ->with("photos")
+                    
                     ->get(),
                 "status" => "200_1f"
             ];
@@ -526,7 +525,7 @@ class DamageController extends Controller
                     ->with("rejectedBy.fonction.department")
                     ->with("equipment.profileGroup.department")
                     ->with("damageType","damageType.profileGroup.department","damageType.department")
-                    ->with("photos")
+                    
                     ->get(),
                 "status" => "200_1f"
             ];
@@ -549,7 +548,7 @@ class DamageController extends Controller
                     ->with("rejectedBy.fonction.department")
                     ->with("equipment.profileGroup.department")
                     ->with("damageType","damageType.profileGroup.department","damageType.department")
-                    ->with("photos")
+                    
                     ->get(),
                 "status" => "200_1f"
             ];
@@ -572,7 +571,7 @@ class DamageController extends Controller
                     ->with("rejectedBy.fonction.department")
                     ->with("equipment.profileGroup.department")
                     ->with("damageType","damageType.profileGroup.department","damageType.department")
-                    ->with("photos")
+                    
                     ->get(),
                 "status" => "200_1f"
             ];
@@ -609,7 +608,7 @@ class DamageController extends Controller
                     ->with("rejectedBy.fonction.department")
                     ->with("equipment.profileGroup.department")
                     ->with("damageType","damageType.profileGroup.department","damageType.department")
-                    ->with("photos")
+                    
                     ->first();
                 $profileGroupDamageTypes[$i]->department=$profileGroupDamageTypes[$i]->department;
                 array_push($damaeTypeWithDamages,$profileGroupDamageTypes[$i]);
@@ -621,61 +620,8 @@ class DamageController extends Controller
         }
     }
 
-    public function foremanIntervention(Request $request){
-        $validator = Validator::make($request->all(), [
-            "id" => "required",
-        ]);
-        if ($validator->fails()) {
-            return [
-                "payload" => $validator->errors(),
-                "status" => "406_2"
-            ];
-        }
+    
 
-        $foreman=User::find($request->foreman_id);
-        if(!$foreman){
-            return [
-                "payload"=>"user is not exist !",
-                "status"=>"user_404",
-            ];
-        }
-
-
-        $damage=Damage::find($request->id);
-        if(!$damage){
-            return [
-                "payload"=>"damage is not exist !",
-                "status"=>"damage_404",
-            ];
-        }
-
-        $damage->description=$request->description;
-        $damage->save();
-
-        if($request->file()) {
-            for ($i=0;$i<count($request->photos);$i++){
-                $file=$request->photos[$i];
-                $filename=time()."_".$file->getClientOriginalName();
-                $this->uploadOne($file, config('cdn.damagePhotos.path'),$filename);
-                $photo=new Photo();
-                $photo->filename=$filename;
-                $photo->damage_id=$damage->id;
-                $photo->save();
-            }
-        }
-        $damage->photos=$damage->photos;
-        return [
-            "payload"=>$damage,
-            "status"=>"200_04",
-        ];
-    }
-
-    public function sendDamagePhotosStoragePath(){
-        return [
-            "payload" => asset("/storage/cdn/damagePhotos/"),
-            "status" => "200_1"
-        ];
-    }
 
     public function delete(Request $request){
         $damage=Damage::find($request->id);
